@@ -1,4 +1,5 @@
 <?php
+
 /*
  * Copyright 2015 Soeezy
  *
@@ -15,22 +16,32 @@ class Encryptor
 
     public function __construct($encryptName, $key)
     {
-
         $reflectionClass = new \ReflectionClass($encryptName);
-        $this->encryptor = $reflectionClass->newInstanceArgs( array(
-            $key
+        $this->encryptor = $reflectionClass->newInstanceArgs(array(
+            $key,
         ));
     }
 
-    public function getEncryptor() {
+    public function getEncryptor()
+    {
         return $this->encryptor;
     }
 
-    public function decrypt($string) {
-        return $this->encryptor->decrypt($string);
+    public function decrypt($string)
+    {
+        if ($string !== null && substr($string, -5) === '<ENC>') {
+            return $this->encryptor->decrypt(substr($string, 0, -5));
+        }
+
+        return $string;
     }
 
-    public function encrypt($string) {
-        return $this->encryptor->encrypt($string);
+    public function encrypt($string)
+    {
+        if ($string !== null && substr($string, -5) !== '<ENC>') {
+            return $this->encryptor->encrypt($string);
+        }
+
+        return $string;
     }
 }
