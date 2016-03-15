@@ -7,7 +7,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Ambta\DoctrineEncryptBundle\DependencyInjection\DoctrineEncryptExtension;
 use Ambta\DoctrineEncryptBundle\DependencyInjection\Compiler\RegisterServiceCompilerPass;
-use Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedType;
+use Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedStringType;
+use Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedTextType;
 use Doctrine\DBAL\Types\Type;
 
 class AmbtaDoctrineEncryptBundle extends Bundle
@@ -25,12 +26,20 @@ class AmbtaDoctrineEncryptBundle extends Bundle
 
     public function boot()
     {
-        if (Type::hasType(EncryptedType::ENCRYPTED) === false) {
-            Type::addType(EncryptedType::ENCRYPTED, 'Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedType');
+        if (Type::hasType(EncryptedStringType::NAME) === false) {
+            Type::addType(EncryptedStringType::NAME, 'Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedStringType');
+        }
+
+        if (Type::hasType(EncryptedTextType::NAME) === false) {
+            Type::addType(EncryptedTextType::NAME, 'Ambta\DoctrineEncryptBundle\DBAL\Types\EncryptedTextType');
         }
         
         $encryptor = $this->container->get('ambta_doctrine_encrypt.encryptor');
-        $encryptedType = Type::getType(EncryptedType::ENCRYPTED);
-        $encryptedType->setEncryptor($encryptor);
+
+        $ecryptedString = Type::getType(EncryptedStringType::NAME);
+        $ecryptedString->setEncryptor($encryptor);
+
+        $ecryptedText = Type::getType(EncryptedTextType::NAME);
+        $ecryptedText->setEncryptor($encryptor);
     }
 }

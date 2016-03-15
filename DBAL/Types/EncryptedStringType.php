@@ -6,9 +6,9 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Ambta\DoctrineEncryptBundle\Services\Encryptor;
 use Doctrine\DBAL\Types\StringType;
 
-class EncryptedType extends StringType
+class EncryptedStringType extends StringType
 {
-    const ENCRYPTED = 'encrypted';
+    const NAME = 'encrypted_string';
 
     private $encryptor;
 
@@ -22,7 +22,7 @@ class EncryptedType extends StringType
      */
     public function getName()
     {
-        return self::ENCRYPTED;
+        return self::NAME;
     }
 
     /**
