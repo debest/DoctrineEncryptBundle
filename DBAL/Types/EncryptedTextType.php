@@ -10,11 +10,11 @@ class EncryptedTextType extends TextType
 {
     const NAME = 'encrypted_text';
 
-    private $encryptor;
+    protected static $encryptor;
 
-    public function setEncryptor(Encryptor $encryptor)
+    public static function setEncryptor(Encryptor $encryptor)
     {
-        $this->encryptor = $encryptor;
+        static::$encryptor = $encryptor;
     }
 
     /**
@@ -31,7 +31,7 @@ class EncryptedTextType extends TextType
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         $value = parent::convertToDatabaseValue($value, $platform);
-        return $this->encryptor->encrypt($value);
+        return static::$encryptor->encrypt($value);
     }
 
     /**
@@ -40,6 +40,6 @@ class EncryptedTextType extends TextType
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         $value = parent::convertToPHPValue($value, $platform);
-        return $this->encryptor->decrypt($value);
+        return static::$encryptor->decrypt($value);
     }
 }

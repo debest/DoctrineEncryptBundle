@@ -36,10 +36,7 @@ class AmbtaDoctrineEncryptBundle extends Bundle
         
         $encryptor = $this->container->get('ambta_doctrine_encrypt.encryptor');
 
-        $ecryptedString = Type::getType(EncryptedStringType::NAME);
-        $ecryptedString->setEncryptor($encryptor);
-
-        $ecryptedText = Type::getType(EncryptedTextType::NAME);
-        $ecryptedText->setEncryptor($encryptor);
+        EncryptedStringType::setEncryptor($encryptor);
+        EncryptedTextType::setEncryptor($encryptor);
     }
 }
